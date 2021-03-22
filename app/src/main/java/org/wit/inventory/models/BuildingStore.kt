@@ -1,0 +1,7 @@
+package org.wit.inventory.models
+
+interface BuildingStore {
+    fun findAll(): List<BuildingModel>
+    fun create(building: BuildingModel)
+    fun update(building: BuildingModel)
+}

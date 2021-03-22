@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Inventory</string>
+    <string name="button_addBuilding">Add Building</string>
+    <string name="hint_buildingName">Building Name</string>
+    <string name="hint_buildingAddress">Building Address</string>
+    <string name="menu_addBuilding">Add</string>
+    <string name="menu_cancelBuilding">Cancel</string>
+    <string name="enter_building_name"> Enter the Building Name </string>
+    <string name="save_building"> Save Building </string>
+</resources>
