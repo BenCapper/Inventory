@@ -29,9 +29,6 @@ class BuildingMemStore : BuildingStore, AnkoLogger {
             foundBuilding.name = building.name
             foundBuilding.address = building.address
             foundBuilding.image = building.image
-            foundBuilding.lat = building.lat
-            foundBuilding.lng = building.lng
-            foundBuilding.zoom = building.zoom
             logAll()
         }
     }

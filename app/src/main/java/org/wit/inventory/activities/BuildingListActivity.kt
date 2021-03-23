@@ -24,7 +24,7 @@ class BuildingListActivity : AppCompatActivity(), BuildingListener {
 
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
-        loadBuildings()
+        recyclerView.adapter = BuildingAdapter(app.buildings.findAll(), this)
 
         toolbar.title = title
         setSupportActionBar(toolbar)
@@ -41,22 +41,13 @@ class BuildingListActivity : AppCompatActivity(), BuildingListener {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onBuildingClick(building: BuildingModel) {
-        startActivityForResult(intentFor<BuildingActivity>().putExtra("building_edit", building), 0)
+    override fun onBuildingClick(placemark: BuildingModel) {
+        startActivityForResult(intentFor<BuildingActivity>().putExtra("building_edit", placemark), 0)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        loadBuildings()
-        super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    private fun loadBuildings() {
-        showBuildings(app.buildings.findAll())
-    }
-
-    fun showBuildings (buildings: List<BuildingModel>) {
-        recyclerView.adapter = BuildingAdapter(buildings, this)
         recyclerView.adapter?.notifyDataSetChanged()
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }
 

@@ -12,5 +12,4 @@
     <string name="change_building_image">Change Image</string>
     <string name="building_image">Building Image</string>
     <string name="button_location">Set Location</string>
-    <string name="title_activity_maps">Map</string>
 </resources>

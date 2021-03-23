@@ -4,16 +4,14 @@ import android.app.Application
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.wit.inventory.models.BuildingMemStore
-import org.wit.inventory.models.BuildingStore
 
 
 class MainApp : Application(), AnkoLogger {
 
-    lateinit var buildings: BuildingStore
+    val buildings = BuildingMemStore()
 
     override fun onCreate() {
         super.onCreate()
-        buildings = BuildingMemStore()
         info("Inventory started")
     }
 }

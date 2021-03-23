@@ -8,7 +8,6 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_building.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
-import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 import org.wit.inventory.R
 import org.wit.inventory.helpers.readImage
@@ -16,7 +15,6 @@ import org.wit.inventory.helpers.readImageFromPath
 import org.wit.inventory.helpers.showImagePicker
 import org.wit.inventory.main.MainApp
 import org.wit.inventory.models.BuildingModel
-import org.wit.inventory.models.Location
 
 class BuildingActivity : AppCompatActivity(), AnkoLogger {
 
@@ -24,8 +22,6 @@ class BuildingActivity : AppCompatActivity(), AnkoLogger {
     lateinit var app: MainApp
     var edit = false
     val IMAGE_REQUEST = 1
-    val LOCATION_REQUEST = 2
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,13 +31,14 @@ class BuildingActivity : AppCompatActivity(), AnkoLogger {
         setSupportActionBar(toolbarAdd)
 
         if (intent.hasExtra("building_edit")) {
-            edit = true
             building = intent.extras?.getParcelable<BuildingModel>("building_edit")!!
             buildingImage.setImageBitmap(readImageFromPath(this, building.image))
+            if (building.image != null) {
+                chooseImage.setText(R.string.change_building_image)
+            }
+            btnAdd.setText(R.string.save_building)
             buildingName.setText(building.name)
             buildingAddress.setText(building.address)
-            btnAdd.setText(R.string.save_building)
-            chooseImage.setText(R.string.change_building_image)
         }
 
         btnAdd.setOnClickListener() {
@@ -52,16 +49,13 @@ class BuildingActivity : AppCompatActivity(), AnkoLogger {
             } else {
                 if (edit) {
                     app.buildings.update(building.copy())
-                    info("update Button Pressed: $buildingName")
-                    setResult(AppCompatActivity.RESULT_OK)
-                    finish()
                 } else {
                     app.buildings.create(building.copy())
-                    info("add Button Pressed: $buildingName")
-                    setResult(AppCompatActivity.RESULT_OK)
-                    finish()
                 }
             }
+            info("add Button Pressed: $buildingName")
+            setResult(AppCompatActivity.RESULT_OK)
+            finish()
         }
 
         chooseImage.setOnClickListener {
@@ -69,16 +63,9 @@ class BuildingActivity : AppCompatActivity(), AnkoLogger {
         }
 
         buildingLocation.setOnClickListener {
-            val location = Location(52.245696, -7.139102, 15f)
-            if (building.zoom != 0f) {
-                location.lat =  building.lat
-                location.lng = building.lng
-                location.zoom = building.zoom
-            }
-            startActivityForResult(intentFor<MapsActivity>().putExtra("location", location), LOCATION_REQUEST)
+            info ("Set Location Pressed")
         }
-        }
-
+    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_building, menu)
         return super.onCreateOptionsMenu(menu)
@@ -100,15 +87,6 @@ class BuildingActivity : AppCompatActivity(), AnkoLogger {
                 if (data != null) {
                     building.image = data.getData().toString()
                     buildingImage.setImageBitmap(readImage(this, resultCode, data))
-                    chooseImage.setText(R.string.change_building_image)
-                }
-            }
-            LOCATION_REQUEST -> {
-                if (data != null) {
-                    val location = data.extras?.getParcelable<Location>("location")!!
-                    building.lat = location.lat
-                    building.lng = location.lng
-                    building.zoom = location.zoom
                 }
             }
         }
