@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.card_building.view.*
 import org.wit.inventory.R
+import org.wit.inventory.helpers.readImageFromPath
 import org.wit.inventory.models.BuildingModel
 
 interface BuildingListener {
@@ -38,6 +39,7 @@ class BuildingAdapter constructor(private var buildings: List<BuildingModel>,
         fun bind(building: BuildingModel, listener : BuildingListener) {
             itemView.buildingName.text = building.name
             itemView.address.text = building.address
+            itemView.imageIcon.setImageBitmap(readImageFromPath(itemView.context, building.image))
             itemView.setOnClickListener {listener.onBuildingClick(building)}
         }
     }

@@ -18,10 +18,11 @@
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             app:elevation="0dip"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            app:theme="@style/MyToolbar">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbarAdd"
+                android:textColor="@color/blue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.appbar.AppBarLayout>
@@ -44,6 +45,7 @@
                     android:layout_margin="8dp"
                     android:autofillHints=""
                     android:hint="@string/hint_buildingName"
+                    android:textColorHint="@color/blue"
                     android:inputType="text"
                     android:maxLength="25"
                     android:maxLines="1"
@@ -57,6 +59,7 @@
                     android:layout_margin="8dp"
                     android:autofillHints=""
                     android:hint="@string/hint_buildingAddress"
+                    android:textColorHint="@color/blue"
                     android:inputType="text"
                     android:maxLength="25"
                     android:maxLines="1"
@@ -64,15 +67,50 @@
                     android:textSize="14sp" />
 
                 <Button
+                    android:id="@+id/chooseImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:layout_margin="16dp"
+                    android:background="@color/grey"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:text="@string/button_addImage"
+                    android:textColor="@color/blue"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/buildingImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:srcCompat="@mipmap/ic_launcher"/>
+
+                <Button
+                    android:id="@+id/buildingLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:stateListAnimator="@null"
+                    android:text="@string/button_location"
+                    android:background="@color/grey"
+                    android:textColor="@color/blue"
+                    android:textSize="16sp"/>
+
+                <Button
                     android:id="@+id/btnAdd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
+                    android:background="@color/grey"
+                    android:textColor="@color/blue"
                     android:stateListAnimator="@null"
                     android:text="@string/button_addBuilding"
                     android:textSize="16sp" />
+
+
+
 
             </LinearLayout>
         </ScrollView>

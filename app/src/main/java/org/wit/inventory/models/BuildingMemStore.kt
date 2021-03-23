@@ -28,6 +28,7 @@ class BuildingMemStore : BuildingStore, AnkoLogger {
         if (foundBuilding != null) {
             foundBuilding.name = building.name
             foundBuilding.address = building.address
+            foundBuilding.image = building.image
             logAll()
         }
     }
