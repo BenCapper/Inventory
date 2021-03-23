@@ -10,11 +10,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Inventory"
         android:name="org.wit.inventory.main.MainApp">
-        <activity android:name=".activities.BuildingActivity">
-        </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".activities.MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
+        <activity android:name=".activities.BuildingActivity"></activity>
         <activity android:name=".activities.BuildingListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
