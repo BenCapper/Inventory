@@ -36,6 +36,10 @@ class BuildingMemStore : BuildingStore, AnkoLogger {
         }
     }
 
+    override fun delete(building: BuildingModel) {
+        buildings.remove(building)
+    }
+
     fun logAll() {
         buildings.forEach{ info("${it}") }
     }
