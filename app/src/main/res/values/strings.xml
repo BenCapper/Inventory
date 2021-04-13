@@ -1,16 +1,16 @@
 <resources>
-    <string name="app_name">Inventory</string>
-    <string name="button_addBuilding">Add Building</string>
-    <string name="hint_buildingName">Building Name</string>
-    <string name="hint_buildingAddress">Building Address</string>
+    <string name="app_name">Ben\'s Inventory Manager</string>
+    <string name="button_addBuilding">Add Branch</string>
+    <string name="hint_buildingName">Branch Name</string>
+    <string name="hint_buildingAddress">Branch Address</string>
     <string name="menu_addBuilding">Add</string>
     <string name="menu_cancelBuilding">Cancel</string>
-    <string name="enter_building_name">Enter the Building Name</string>
-    <string name="save_building">Save Building</string>
+    <string name="enter_building_name">Enter the Branch Name</string>
+    <string name="save_building">Save Branch</string>
     <string name="button_addImage">Add Image</string>
-    <string name="select_building_image">Select Building Image</string>
+    <string name="select_building_image">Select Branch Image</string>
     <string name="change_building_image">Change Image</string>
-    <string name="building_image">Building Image</string>
+    <string name="building_image">Branch Image</string>
     <string name="button_location">Set Location</string>
     <string name="title_activity_maps">Map</string>
     <string name="menu_deleteBuilding">Delete</string>
