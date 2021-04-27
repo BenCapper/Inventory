@@ -11,6 +11,7 @@ import org.wit.inventory.models.BuildingModel
 
 interface BuildingListener {
     fun onBuildingClick(building: BuildingModel)
+    fun onEditBuildingClick(building: BuildingModel)
 }
 
 class BuildingAdapter constructor(private var buildings: List<BuildingModel>,
@@ -41,6 +42,7 @@ class BuildingAdapter constructor(private var buildings: List<BuildingModel>,
             itemView.address.text = building.address
             itemView.imageIcon.setImageBitmap(readImageFromPath(itemView.context, building.image))
             itemView.setOnClickListener {listener.onBuildingClick(building)}
+            itemView.edit.setOnClickListener {listener.onEditBuildingClick(building)}
         }
     }
 
