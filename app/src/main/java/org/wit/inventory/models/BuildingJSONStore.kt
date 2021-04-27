@@ -10,11 +10,11 @@ import org.wit.inventory.helpers.read
 import org.wit.inventory.helpers.write
 import java.util.*
 
-val JSON_FILE = "buildings.json"
-val gsonBuilder = GsonBuilder().setPrettyPrinting().create()
-val listType = object : TypeToken<java.util.ArrayList<BuildingModel>>() {}.type
+const val JSON_BUILD_FILE = "buildings.json"
+val gsonBuildingBuilder = GsonBuilder().setPrettyPrinting().create()
+val buildingListType = object : TypeToken<java.util.ArrayList<BuildingModel>>() {}.type
 
-fun generateRandomId(): Long {
+fun generateRandomBuildId(): Long {
     return Random().nextLong()
 }
 
@@ -25,7 +25,7 @@ class BuildingJSONStore : BuildingStore, AnkoLogger {
 
     constructor (context: Context) {
         this.context = context
-        if (exists(context, JSON_FILE)) {
+        if (exists(context, JSON_BUILD_FILE)) {
             deserialize()
         }
     }
@@ -35,7 +35,7 @@ class BuildingJSONStore : BuildingStore, AnkoLogger {
     }
 
     override fun create(building: BuildingModel) {
-        building.id = generateRandomId()
+        building.id = generateRandomBuildId()
         buildings.add(building)
         serialize()
     }
@@ -61,12 +61,12 @@ class BuildingJSONStore : BuildingStore, AnkoLogger {
     }
 
     private fun serialize() {
-        val jsonString = gsonBuilder.toJson(buildings, listType)
-        write(context, JSON_FILE, jsonString)
+        val jsonString = gsonBuildingBuilder.toJson(buildings, buildingListType)
+        write(context, JSON_BUILD_FILE, jsonString)
     }
 
     private fun deserialize() {
-        val jsonString = read(context, JSON_FILE)
-        buildings = Gson().fromJson(jsonString, listType)
+        val jsonString = read(context, JSON_BUILD_FILE)
+        buildings = Gson().fromJson(jsonString, buildingListType)
     }
 }

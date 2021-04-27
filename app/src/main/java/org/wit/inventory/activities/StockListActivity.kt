@@ -6,29 +6,32 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_building_list.*
+import kotlinx.android.synthetic.main.card_stock.*
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.wit.inventory.R
 import org.wit.inventory.main.MainApp
 import org.wit.inventory.models.BuildingModel
+import org.wit.inventory.models.StockModel
 
 
-class BuildingListActivity : AppCompatActivity(), BuildingListener {
+class StockListActivity : AppCompatActivity(), StockListener {
 
     lateinit var app: MainApp
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_building_list)
+        setContentView(R.layout.activity_stock_list)
         app = application as MainApp
 
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
-        loadBuildings()
-
-        toolbar.title = title
+        loadBranchStock()
+        var branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
+        toolbar.title = branchStock.name + " " + "Stock"
         setSupportActionBar(toolbar)
+
 
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -37,31 +40,43 @@ class BuildingListActivity : AppCompatActivity(), BuildingListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        var branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
         when (item.itemId) {
-            R.id.item_add -> startActivityForResult<BuildingActivity>(0)
+            R.id.item_add -> startActivityForResult(intentFor<StockActivity>().putExtra("branchName", branchStock), 0)
         }
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onBuildingClick(building: BuildingModel) {
-        startActivityForResult(intentFor<StockListActivity>().putExtra("branchName", building), 0)
+    override fun onStockClick(stock: StockModel) {
+        startActivityForResult(intentFor<StockActivity>().putExtra("stock_edit", stock), 0)
     }
 
-    override fun onEditBuildingClick(building: BuildingModel) {
-        startActivityForResult(intentFor<BuildingActivity>().putExtra("building_edit", building), 0)
+    override fun onAddStockClick(stock: StockModel) {
+        stock.inStock++
+        loadBranchStock()
+    }
+
+    override fun onMinusStockClick(stock: StockModel) {
+        stock.inStock--
+        loadBranchStock()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        loadBuildings()
+        loadBranchStock()
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun loadBuildings() {
-        showBuildings(app.buildings.findAll())
+    private fun loadStock() {
+        showStock(app.stock.findAll())
     }
 
-    private fun showBuildings (buildings: List<BuildingModel>) {
-        recyclerView.adapter = BuildingAdapter(buildings, this)
+    private fun loadBranchStock(){
+        var branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
+        showStock(app.stock.findByBranchId(branchStock.id))
+    }
+
+    private fun showStock (stock: List<StockModel>) {
+        recyclerView.adapter = StockAdapter(stock, this)
         recyclerView.adapter?.notifyDataSetChanged()
     }
 }

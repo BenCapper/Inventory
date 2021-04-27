@@ -1,0 +1,114 @@
+package org.wit.inventory.activities
+
+import android.content.Intent
+import android.icu.number.IntegerWidth
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import kotlinx.android.synthetic.main.activity_building.toolbarAdd
+import kotlinx.android.synthetic.main.activity_stock.*
+import kotlinx.android.synthetic.main.card_stock.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.toast
+import org.wit.inventory.R
+import org.wit.inventory.helpers.readImage
+import org.wit.inventory.helpers.readImageFromPath
+import org.wit.inventory.helpers.showImagePicker
+import org.wit.inventory.main.MainApp
+import org.wit.inventory.models.BuildingModel
+import org.wit.inventory.models.StockModel
+
+class StockActivity : AppCompatActivity(), AnkoLogger {
+
+    var stock = StockModel()
+    var branch = BuildingModel()
+    lateinit var app: MainApp
+    var edit = false
+    val IMAGE_REQUEST = 1
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_stock)
+        app = application as MainApp
+        toolbarAdd.title = title
+        setSupportActionBar(toolbarAdd)
+
+        if (intent.hasExtra("stock_edit")) {
+            edit = true
+            stock = intent.extras?.getParcelable<StockModel>("stock_edit")!!
+            stockImage.setImageBitmap(readImageFromPath(this, stock.image))
+            stockName.setText(stock.name)
+            stockWeight.setText(stock.weight)
+            stockPrice.setText(stock.price.toString())
+            stockDept.setText(stock.dept)
+            btnAddStock.setText(R.string.save_stock)
+            chooseStockImage.setText(R.string.change_stock_image)
+        }
+
+        btnAddStock.setOnClickListener() {
+            branch = intent.extras?.getParcelable<BuildingModel>("branchName")!!
+            stock.name = stockName.text.toString()
+            stock.branch = branch.id
+            stock.dept = stockDept.text.toString()
+            stock.weight = stockWeight.text.toString()
+            stock.price = stockPrice.text.toString().toDouble()
+            stock.inStock = 0
+            if (stock.name.isEmpty()) {
+                toast(R.string.enter_stock_name)
+            } else {
+                if (edit) {
+                    app.stock.update(stock.copy())
+                    info("update Button Pressed: $stockName")
+                    setResult(AppCompatActivity.RESULT_OK)
+                    finish()
+                } else {
+                    app.stock.create(stock.copy())
+                    info("add Button Pressed: $stockName")
+                    setResult(AppCompatActivity.RESULT_OK)
+                    finish()
+                }
+            }
+        }
+
+        chooseStockImage.setOnClickListener {
+            showImagePicker(this, IMAGE_REQUEST)
+        }
+
+        }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_stock, menu)
+        if (edit && menu != null) menu.getItem(0).isVisible = true
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item?.itemId) {
+            R.id.item_delete -> {
+                app.stock.delete(stock)
+                finish()
+            }
+            R.id.item_cancel -> {
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            IMAGE_REQUEST -> {
+                if (data != null) {
+                    stock.image = data.getData().toString()
+                    stockImage.setImageBitmap(readImage(this, resultCode, data))
+                    chooseStockImage.setText(R.string.change_building_image)
+                }
+            }
+        }
+    }
+}
