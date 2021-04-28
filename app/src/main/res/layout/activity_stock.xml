@@ -31,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/appBarLayout"
+            android:layout_marginTop="-1dp"
             android:fillViewport="true">
 
             <LinearLayout
@@ -44,14 +45,14 @@
                     android:layout_height="45dp"
                     android:layout_margin="8dp"
                     android:autofillHints=""
+                    android:backgroundTint="@color/orange"
                     android:hint="@string/hint_stockName"
-                    android:backgroundTint="@color/blue"
-                    android:textColorHint="@color/grey"
-                    android:textColor="@color/blue"
                     android:inputType="text"
                     android:maxLength="25"
                     android:maxLines="1"
                     android:padding="8dp"
+                    android:textColor="@color/blue"
+                    android:textColorHint="@color/grey"
                     android:textSize="14sp" />
 
                 <EditText
@@ -60,14 +61,14 @@
                     android:layout_height="45dp"
                     android:layout_margin="8dp"
                     android:autofillHints=""
+                    android:backgroundTint="@color/orange"
                     android:hint="@string/hint_stockDept"
-                    android:backgroundTint="@color/blue"
-                    android:textColorHint="@color/grey"
-                    android:textColor="@color/blue"
                     android:inputType="text"
                     android:maxLength="25"
                     android:maxLines="1"
                     android:padding="8dp"
+                    android:textColor="@color/blue"
+                    android:textColorHint="@color/grey"
                     android:textSize="14sp" />
 
                 <EditText
@@ -76,14 +77,14 @@
                     android:layout_height="45dp"
                     android:layout_margin="8dp"
                     android:autofillHints=""
+                    android:backgroundTint="@color/orange"
                     android:hint="@string/hint_stockWeight"
-                    android:backgroundTint="@color/blue"
-                    android:textColorHint="@color/grey"
-                    android:textColor="@color/blue"
                     android:inputType="text"
                     android:maxLength="25"
                     android:maxLines="1"
                     android:padding="8dp"
+                    android:textColor="@color/blue"
+                    android:textColorHint="@color/grey"
                     android:textSize="14sp" />
 
                 <EditText
@@ -92,14 +93,14 @@
                     android:layout_height="45dp"
                     android:layout_margin="8dp"
                     android:autofillHints=""
+                    android:backgroundTint="@color/orange"
                     android:hint="@string/hint_stockPrice"
-                    android:backgroundTint="@color/blue"
-                    android:textColorHint="@color/grey"
-                    android:textColor="@color/blue"
                     android:inputType="numberDecimal"
                     android:maxLength="25"
                     android:maxLines="1"
                     android:padding="8dp"
+                    android:textColor="@color/blue"
+                    android:textColorHint="@color/grey"
                     android:textSize="14sp" />
 
                 <Button
@@ -118,8 +119,7 @@
                     android:id="@+id/stockImage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    app:srcCompat="@mipmap/ic_launcher"/>
+                    android:layout_margin="16dp" />
 
                 <Button
                     android:id="@+id/btnAddStock"
@@ -127,12 +127,10 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:background="@color/grey"
-                    android:textColor="@color/blue"
                     android:stateListAnimator="@null"
                     android:text="@string/button_addStock"
+                    android:textColor="@color/blue"
                     android:textSize="16sp" />
-
-
 
 
             </LinearLayout>

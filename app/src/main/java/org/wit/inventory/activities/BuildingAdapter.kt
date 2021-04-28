@@ -38,8 +38,8 @@ class BuildingAdapter constructor(private var buildings: List<BuildingModel>,
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(building: BuildingModel, listener : BuildingListener) {
-            itemView.buildingName.text = building.name
-            itemView.address.text = building.address
+            itemView.buildingName.text = building.name.capitalize()
+            itemView.address.text = building.address.capitalize()
             itemView.imageIcon.setImageBitmap(readImageFromPath(itemView.context, building.image))
             itemView.setOnClickListener {listener.onBuildingClick(building)}
             itemView.edit.setOnClickListener {listener.onEditBuildingClick(building)}

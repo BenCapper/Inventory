@@ -57,8 +57,13 @@ class StockJSONStore : StockStore, AnkoLogger {
             foundStock.weight = stock.weight
             foundStock.price = stock.price
             foundStock.image = stock.image
+            foundStock.inStock = stock.inStock
         }
         serialize()
+    }
+
+    override fun filterStock(stockName: String): List<StockModel> {
+        return stocks.filter { s -> s.name.toLowerCase().contains(stockName.toLowerCase()) }
     }
 
     override fun delete(stock: StockModel) {

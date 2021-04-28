@@ -19,6 +19,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:titleTextColor="@color/blue" />
+
+        <SearchView
+            android:id="@+id/buildingSearch"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginTop="-6dp"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView

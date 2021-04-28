@@ -40,10 +40,10 @@ class StockAdapter constructor(private var stocks: List<StockModel>,
     class MainHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
 
         fun bind(stock: StockModel, listener : StockListener) {
-            itemView.stockListName.text = stock.name
+            itemView.stockListName.text = stock.name.capitalize()
             itemView.stockListWeight.text = stock.weight
             itemView.stockListPrice.text = stock.price.toString()
-            itemView.stockListDept.text = stock.dept
+            itemView.stockListDept.text = stock.dept.capitalize()
             itemView.inStockNum.text = stock.inStock.toString()
             itemView.stockImageIcon.setImageBitmap(readImageFromPath(itemView.context, stock.image))
             itemView.setOnClickListener {listener.onStockClick(stock)}
