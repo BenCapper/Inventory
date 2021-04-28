@@ -60,6 +60,10 @@ class BuildingJSONStore : BuildingStore, AnkoLogger {
         serialize()
     }
 
+    override fun filterBuildings(buildingName: String): List<BuildingModel> {
+        return buildings.filter { b -> b.name.toLowerCase().contains(buildingName.toLowerCase()) }
+    }
+
     private fun serialize() {
         val jsonString = gsonBuildingBuilder.toJson(buildings, buildingListType)
         write(context, JSON_BUILD_FILE, jsonString)

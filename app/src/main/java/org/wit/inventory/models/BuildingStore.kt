@@ -5,4 +5,5 @@ interface BuildingStore {
     fun create(building: BuildingModel)
     fun update(building: BuildingModel)
     fun delete(building: BuildingModel)
+    fun filterBuildings(buildingName: String): List<BuildingModel>
 }

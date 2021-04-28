@@ -35,5 +35,10 @@
     <string name="editStock">Edit</string>
     <string name="selectStock">Select</string>
     <string name="branchName">Stock</string>
+    <string name="departmentToast">Enter Department Name</string>
+    <string name="nameToast">Enter Item Name</string>
+    <string name="weightToast">Enter Item Weight</string>
+    <string name="priceToast">Enter Item Price</string>
+    <string name="imageToast">Select an Image</string>
 
 </resources>

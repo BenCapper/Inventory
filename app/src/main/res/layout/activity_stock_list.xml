@@ -19,6 +19,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:titleTextColor="@color/blue" />
+
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:id="@+id/stockSearch"
+            android:layout_marginTop="-6dp"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView

@@ -1,17 +1,14 @@
 package org.wit.inventory.activities
 
 import android.content.Intent
-import android.icu.number.IntegerWidth
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_building.toolbarAdd
 import kotlinx.android.synthetic.main.activity_stock.*
-import kotlinx.android.synthetic.main.card_stock.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
-import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 import org.wit.inventory.R
 import org.wit.inventory.helpers.readImage
@@ -50,26 +47,40 @@ class StockActivity : AppCompatActivity(), AnkoLogger {
         }
 
         btnAddStock.setOnClickListener() {
-            branch = intent.extras?.getParcelable<BuildingModel>("branchName")!!
-            stock.name = stockName.text.toString()
-            stock.branch = branch.id
-            stock.dept = stockDept.text.toString()
-            stock.weight = stockWeight.text.toString()
-            stock.price = stockPrice.text.toString().toDouble()
-            stock.inStock = 0
-            if (stock.name.isEmpty()) {
-                toast(R.string.enter_stock_name)
+            if (intent.hasExtra("branchName")) {
+                branch = intent.extras?.getParcelable<BuildingModel>("branchName")!!
+                stock.branch = branch.id
+                stock.inStock = 0
+            }
+            if (stockName.text.isNullOrEmpty()) {
+                toast(R.string.nameToast)
             } else {
-                if (edit) {
-                    app.stock.update(stock.copy())
-                    info("update Button Pressed: $stockName")
-                    setResult(AppCompatActivity.RESULT_OK)
-                    finish()
+                stock.name = stockName.text.toString()
+                if (stockDept.text.isNullOrEmpty()) {
+                    toast(R.string.departmentToast)
                 } else {
-                    app.stock.create(stock.copy())
-                    info("add Button Pressed: $stockName")
-                    setResult(AppCompatActivity.RESULT_OK)
-                    finish()
+                    stock.dept = stockDept.text.toString()
+                    stock.weight = stockWeight.text.toString()
+                    if (stockWeight.text.isNullOrEmpty()) {
+                        toast(R.string.weightToast)
+                    } else {
+                        if (stockPrice.text.toString().isEmpty()) {
+                            toast(R.string.priceToast)
+                        } else {
+                            stock.price = stockPrice.text.toString().toDouble()
+                            if (edit) {
+                                app.stock.update(stock.copy())
+                                info("update Button Pressed: $stockName")
+                                setResult(AppCompatActivity.RESULT_OK)
+                                finish()
+                            } else {
+                                app.stock.create(stock.copy())
+                                info("add Button Pressed: $stockName")
+                                setResult(AppCompatActivity.RESULT_OK)
+                                finish()
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -104,9 +115,9 @@ class StockActivity : AppCompatActivity(), AnkoLogger {
         when (requestCode) {
             IMAGE_REQUEST -> {
                 if (data != null) {
-                    stock.image = data.getData().toString()
+                    stock.image = data.data.toString()
                     stockImage.setImageBitmap(readImage(this, resultCode, data))
-                    chooseStockImage.setText(R.string.change_building_image)
+                    chooseStockImage.setText(R.string.change_stock_image)
                 }
             }
         }

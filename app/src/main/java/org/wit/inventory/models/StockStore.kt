@@ -6,4 +6,5 @@ interface StockStore {
     fun update(stock: StockModel)
     fun delete(stock: StockModel)
     fun findByBranchId(id: Long): List<StockModel>
+    fun filterStock(stockName: String): List<StockModel>
 }

@@ -3,6 +3,7 @@ package org.wit.inventory.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_building_list.*
@@ -30,6 +31,19 @@ class BuildingListActivity : AppCompatActivity(), BuildingListener {
         toolbar.title = title
         setSupportActionBar(toolbar)
 
+        //https://stackoverflow.com/questions/55949305/how-to-properly-retrieve-data-from-searchview-in-kotlin
+        buildingSearch.setOnQueryTextListener(object :  SearchView.OnQueryTextListener  {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    showBuildings(app.buildings.filterBuildings(newText))
+                }
+                return false
+            }
+        })
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)

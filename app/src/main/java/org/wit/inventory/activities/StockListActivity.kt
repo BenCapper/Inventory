@@ -3,9 +3,13 @@ package org.wit.inventory.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_building_list.*
+import kotlinx.android.synthetic.main.activity_building_list.recyclerView
+import kotlinx.android.synthetic.main.activity_building_list.toolbar
+import kotlinx.android.synthetic.main.activity_stock_list.*
 import kotlinx.android.synthetic.main.card_stock.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.startActivityForResult
@@ -32,6 +36,20 @@ class StockListActivity : AppCompatActivity(), StockListener {
         toolbar.title = branchStock.name + " " + "Stock"
         setSupportActionBar(toolbar)
 
+        //https://stackoverflow.com/questions/55949305/how-to-properly-retrieve-data-from-searchview-in-kotlin
+        stockSearch.setOnQueryTextListener(object :  SearchView.OnQueryTextListener  {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                var branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
+                if (newText != null) {
+                    showStock(app.stock.findByBranchId(branchStock.id).filter { s -> s.name.toLowerCase().contains(newText.toLowerCase()) })
+                }
+                return false
+            }
+        })
 
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -48,16 +66,19 @@ class StockListActivity : AppCompatActivity(), StockListener {
     }
 
     override fun onStockClick(stock: StockModel) {
-        startActivityForResult(intentFor<StockActivity>().putExtra("stock_edit", stock), 0)
+        startActivityForResult(intentFor<StockActivity>().putExtra("stock_edit", stock), 0,)
+
     }
 
     override fun onAddStockClick(stock: StockModel) {
         stock.inStock++
+        app.stock.update(stock)
         loadBranchStock()
     }
 
     override fun onMinusStockClick(stock: StockModel) {
         stock.inStock--
+        app.stock.update(stock)
         loadBranchStock()
     }
 
