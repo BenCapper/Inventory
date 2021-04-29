@@ -103,6 +103,22 @@
                     android:textColorHint="@color/grey"
                     android:textSize="14sp" />
 
+                <EditText
+                    android:id="@+id/stockQuantity"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_margin="8dp"
+                    android:autofillHints=""
+                    android:backgroundTint="@color/orange"
+                    android:hint="@string/hint_stockQuantity"
+                    android:inputType="numberDecimal"
+                    android:maxLength="25"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:textColor="@color/blue"
+                    android:textColorHint="@color/grey"
+                    android:textSize="14sp" />
+
                 <Button
                     android:id="@+id/chooseStockImage"
                     android:layout_width="match_parent"

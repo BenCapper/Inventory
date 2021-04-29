@@ -22,6 +22,7 @@
     <string name="hint_stockBranch">Branch Name</string>
     <string name="hint_stockDept">Department</string>
     <string name="hint_stockWeight">Item Weight</string>
+    <string name="hint_stockQuantity">Item Quantity</string>
     <string name="hint_stockPrice">Item Price</string>
     <string name="menu_addStock">Add Item</string>
     <string name="menu_cancelStock">Cancel</string>
@@ -39,6 +40,7 @@
     <string name="nameToast">Enter Item Name</string>
     <string name="weightToast">Enter Item Weight</string>
     <string name="priceToast">Enter Item Price</string>
+    <string name="quantityToast">Enter Item Quantity</string>
     <string name="imageToast">Select an Image</string>
 
 </resources>

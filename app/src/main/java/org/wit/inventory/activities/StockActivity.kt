@@ -42,6 +42,7 @@ class StockActivity : AppCompatActivity(), AnkoLogger {
             stockWeight.setText(stock.weight)
             stockPrice.setText(stock.price.toString())
             stockDept.setText(stock.dept)
+            stockQuantity.setText(stock.inStock.toString())
             btnAddStock.setText(R.string.save_stock)
             chooseStockImage.setText(R.string.change_stock_image)
         }
@@ -68,16 +69,21 @@ class StockActivity : AppCompatActivity(), AnkoLogger {
                             toast(R.string.priceToast)
                         } else {
                             stock.price = stockPrice.text.toString().toDouble()
-                            if (edit) {
-                                app.stock.update(stock.copy())
-                                info("update Button Pressed: $stockName")
-                                setResult(AppCompatActivity.RESULT_OK)
-                                finish()
+                            if (stockQuantity.text.toString().isEmpty()) {
+                                toast(R.string.quantityToast)
                             } else {
-                                app.stock.create(stock.copy())
-                                info("add Button Pressed: $stockName")
-                                setResult(AppCompatActivity.RESULT_OK)
-                                finish()
+                                stock.inStock = stockQuantity.text.toString().toLong()
+                                if (edit) {
+                                    app.stock.update(stock.copy())
+                                    info("update Button Pressed: $stockName")
+                                    setResult(AppCompatActivity.RESULT_OK)
+                                    finish()
+                                } else {
+                                    app.stock.create(stock.copy())
+                                    info("add Button Pressed: $stockName")
+                                    setResult(AppCompatActivity.RESULT_OK)
+                                    finish()
+                                }
                             }
                         }
                     }

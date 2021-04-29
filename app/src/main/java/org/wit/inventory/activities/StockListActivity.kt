@@ -6,17 +6,15 @@ import android.view.*
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_building_list.*
 import kotlinx.android.synthetic.main.activity_building_list.recyclerView
 import kotlinx.android.synthetic.main.activity_building_list.toolbar
 import kotlinx.android.synthetic.main.activity_stock_list.*
-import kotlinx.android.synthetic.main.card_stock.*
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.startActivityForResult
 import org.wit.inventory.R
 import org.wit.inventory.main.MainApp
 import org.wit.inventory.models.BuildingModel
 import org.wit.inventory.models.StockModel
+import java.util.*
 
 
 class StockListActivity : AppCompatActivity(), StockListener {
@@ -32,7 +30,7 @@ class StockListActivity : AppCompatActivity(), StockListener {
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
         loadBranchStock()
-        var branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
+        val branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
         toolbar.title = branchStock.name + " " + "Stock"
         setSupportActionBar(toolbar)
 
@@ -43,9 +41,9 @@ class StockListActivity : AppCompatActivity(), StockListener {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                var branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
+                val branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
                 if (newText != null) {
-                    showStock(app.stock.findByBranchId(branchStock.id).filter { s -> s.name.toLowerCase().contains(newText.toLowerCase()) })
+                    showStock(app.stock.findByBranchId(branchStock.id).filter { s -> s.name.toLowerCase(Locale.ROOT).contains(newText.toLowerCase(Locale.ROOT)) })
                 }
                 return false
             }
@@ -58,7 +56,7 @@ class StockListActivity : AppCompatActivity(), StockListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
+        val branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
         when (item.itemId) {
             R.id.item_add -> startActivityForResult(intentFor<StockActivity>().putExtra("branchName", branchStock), 0)
         }
@@ -66,7 +64,7 @@ class StockListActivity : AppCompatActivity(), StockListener {
     }
 
     override fun onStockClick(stock: StockModel) {
-        startActivityForResult(intentFor<StockActivity>().putExtra("stock_edit", stock), 0,)
+        startActivityForResult(intentFor<StockActivity>().putExtra("stock_edit", stock), 0)
 
     }
 
@@ -87,12 +85,9 @@ class StockListActivity : AppCompatActivity(), StockListener {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun loadStock() {
-        showStock(app.stock.findAll())
-    }
 
     private fun loadBranchStock(){
-        var branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
+        val branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
         showStock(app.stock.findByBranchId(branchStock.id))
     }
 
