@@ -2,10 +2,14 @@ package org.wit.inventory.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_building_list.recyclerView
 import kotlinx.android.synthetic.main.activity_building_list.toolbar
 import kotlinx.android.synthetic.main.activity_stock_list.*
@@ -18,7 +22,10 @@ import java.util.*
 
 
 class StockListActivity : AppCompatActivity(), StockListener {
-
+    private companion object{
+        private const val TAG = "StockListActivity"
+    }
+    private lateinit var auth: FirebaseAuth
     lateinit var app: MainApp
 
 
@@ -26,7 +33,7 @@ class StockListActivity : AppCompatActivity(), StockListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stock_list)
         app = application as MainApp
-
+        auth = Firebase.auth
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
         loadBranchStock()
@@ -56,6 +63,14 @@ class StockListActivity : AppCompatActivity(), StockListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.logout){
+            Log.i(TAG, "Logout")
+            //Logout the User
+            auth.signOut()
+            val logoutIntent = Intent(this, LoginActivity::class.java)
+            logoutIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(logoutIntent)
+        }
         val branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
         when (item.itemId) {
             R.id.item_add -> startActivityForResult(intentFor<StockActivity>().putExtra("branchName", branchStock), 0)
