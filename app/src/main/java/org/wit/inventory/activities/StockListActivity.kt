@@ -3,6 +3,7 @@ package org.wit.inventory.activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+<<<<<<< Updated upstream
 import android.view.*
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+=======
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+>>>>>>> Stashed changes
 import kotlinx.android.synthetic.main.activity_building_list.recyclerView
 import kotlinx.android.synthetic.main.activity_building_list.toolbar
 import kotlinx.android.synthetic.main.activity_stock_list.*
@@ -18,7 +30,6 @@ import org.wit.inventory.R
 import org.wit.inventory.main.MainApp
 import org.wit.inventory.models.BuildingModel
 import org.wit.inventory.models.StockModel
-import java.util.*
 
 
 class StockListActivity : AppCompatActivity(), StockListener {
@@ -27,32 +38,42 @@ class StockListActivity : AppCompatActivity(), StockListener {
     }
     private lateinit var auth: FirebaseAuth
     lateinit var app: MainApp
-
+    private lateinit var stockList: MutableList<StockModel>
+    private lateinit var foundList: MutableList<StockModel>
+    private val db = FirebaseDatabase.getInstance().reference.child("Stock")
+    private lateinit var branchStock: BuildingModel;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stock_list)
+<<<<<<< Updated upstream
         app = application as MainApp
         auth = Firebase.auth
+=======
+
+>>>>>>> Stashed changes
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
-        loadBranchStock()
-        val branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
+        getStockData()
+        app = application as MainApp
+        branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
+
         toolbar.title = branchStock.name + " " + "Stock"
         setSupportActionBar(toolbar)
 
         //https://stackoverflow.com/questions/55949305/how-to-properly-retrieve-data-from-searchview-in-kotlin
-        stockSearch.setOnQueryTextListener(object :  SearchView.OnQueryTextListener  {
+        stockSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                val branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
                 if (newText != null) {
-                    showStock(app.stock.findByBranchId(branchStock.id).filter { s -> s.name.toLowerCase(Locale.ROOT).contains(newText.toLowerCase(Locale.ROOT)) })
+                    searchStock(newText)
+                } else {
+                    getStockData()
                 }
-                return false
+                return true
             }
         })
 
@@ -73,7 +94,12 @@ class StockListActivity : AppCompatActivity(), StockListener {
         }
         val branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
         when (item.itemId) {
-            R.id.item_add -> startActivityForResult(intentFor<StockActivity>().putExtra("branchName", branchStock), 0)
+            R.id.item_add -> startActivityForResult(
+                intentFor<StockActivity>().putExtra(
+                    "branchName",
+                    branchStock
+                ), 0
+            )
         }
         return super.onOptionsItemSelected(item)
     }
@@ -83,32 +109,59 @@ class StockListActivity : AppCompatActivity(), StockListener {
 
     }
 
+
     override fun onAddStockClick(stock: StockModel) {
         stock.inStock++
-        app.stock.update(stock)
-        loadBranchStock()
+        app.stocks.update(stock)
     }
 
     override fun onMinusStockClick(stock: StockModel) {
         stock.inStock--
-        app.stock.update(stock)
-        loadBranchStock()
+        app.stocks.update(stock)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        loadBranchStock()
+        getStockData()
         super.onActivityResult(requestCode, resultCode, data)
     }
 
 
-    private fun loadBranchStock(){
-        val branchStock = intent.extras?.getParcelable<BuildingModel>("branchName")!!
-        showStock(app.stock.findByBranchId(branchStock.id))
+    private fun getStockData(){
+        db.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                stockList = mutableListOf()
+                if (snapshot.exists()) {
+                    for (stockSnap in snapshot.children) {
+                        val stock = stockSnap.getValue(StockModel::class.java)
+                        stockList.add(stock!!)
+                    }
+                }
+                showStock(stockList)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.w("Failed", error.toException())
+            }
+        })
     }
 
-    private fun showStock (stock: List<StockModel>) {
+    private fun loadBranchStock(){
+        showStock(app.stocks.search(branchStock.id))
+    }
+
+    private fun showStock(stock: List<StockModel>) {
         recyclerView.adapter = StockAdapter(stock, this)
         recyclerView.adapter?.notifyDataSetChanged()
+    }
+
+    private fun searchStock(newText: String){
+        foundList = mutableListOf()
+        for(item in stockList){
+            if(item.name.toLowerCase().contains(newText.toLowerCase())){
+                foundList.add(item)
+            }
+        }
+        showStock(foundList)
     }
 }
 
