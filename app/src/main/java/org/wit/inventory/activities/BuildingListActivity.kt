@@ -1,15 +1,25 @@
 package org.wit.inventory.activities
 
 import android.content.Intent
+import android.nfc.Tag
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+<<<<<<< Updated upstream
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+=======
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
+>>>>>>> Stashed changes
 import kotlinx.android.synthetic.main.activity_building_list.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.startActivity
@@ -26,19 +36,24 @@ class BuildingListActivity : AppCompatActivity(), BuildingListener {
     }
     private lateinit var auth: FirebaseAuth
     lateinit var app: MainApp
+    private val db = FirebaseDatabase.getInstance().reference.child("Building")
+    private lateinit var builds: MutableList<BuildingModel>
+    private lateinit var foundList: MutableList<BuildingModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getBuildingData()
         setContentView(R.layout.activity_building_list)
         auth = Firebase.auth
         app = application as MainApp
-
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
-        loadBuildings()
 
+        //getBuildingData()
         toolbar.title = title
         setSupportActionBar(toolbar)
+
+
 
         //https://stackoverflow.com/questions/55949305/how-to-properly-retrieve-data-from-searchview-in-kotlin
         buildingSearch.setOnQueryTextListener(object :  SearchView.OnQueryTextListener  {
@@ -48,9 +63,11 @@ class BuildingListActivity : AppCompatActivity(), BuildingListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
-                    showBuildings(app.buildings.filterBuildings(newText))
+                    search(newText)
+                } else {
+                    showBuildings(app.builds.findAll())
                 }
-                return false
+                return true
             }
         })
     }
@@ -83,17 +100,47 @@ class BuildingListActivity : AppCompatActivity(), BuildingListener {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        loadBuildings()
+        getBuildingData()
         super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun loadBuildings() {
-        showBuildings(app.buildings.findAll())
+        showBuildings(app.builds.findAll())
+
     }
+    private fun getBuildingData(){
+        db.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                builds = mutableListOf()
+                if(snapshot.exists()){
+                    for(buildSnap in snapshot.children){
+                        val build = buildSnap.getValue(BuildingModel::class.java)
+                        builds.add(build!!)
+                    }
+                }
+                showBuildings(builds)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.w("Failed", error.toException())
+            }
+        })
+    }
+
 
     private fun showBuildings (buildings: List<BuildingModel>) {
         recyclerView.adapter = BuildingAdapter(buildings, this)
         recyclerView.adapter?.notifyDataSetChanged()
+    }
+
+    private fun search(newText: String){
+        foundList = mutableListOf()
+        for(item in builds){
+            if(item.name.toLowerCase().contains(newText.toLowerCase())){
+                foundList.add(item)
+            }
+        }
+        showBuildings(foundList)
     }
 }
 
