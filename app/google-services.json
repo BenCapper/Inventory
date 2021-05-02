@@ -1,19 +1,30 @@
 {
   "project_info": {
+<<<<<<< Updated upstream
     "project_number": "1026188132100",
     "project_id": "inventory-9610d",
     "storage_bucket": "inventory-9610d.appspot.com"
+=======
+    "project_number": "464203043778",
+    "project_id": "inventorymanager-ada13",
+    "storage_bucket": "inventorymanager-ada13.appspot.com"
+>>>>>>> Stashed changes
   },
   "client": [
     {
       "client_info": {
+<<<<<<< Updated upstream
         "mobilesdk_app_id": "1:1026188132100:android:d3325e4e27bf3557519a51",
+=======
+        "mobilesdk_app_id": "1:464203043778:android:1244b66ef0849e973fbc5b",
+>>>>>>> Stashed changes
         "android_client_info": {
           "package_name": "org.wit.inventory"
         }
       },
       "oauth_client": [
         {
+<<<<<<< Updated upstream
           "client_id": "1026188132100-9u61st1hsgjo71m77l8kecpaih8vqrvo.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -23,19 +34,30 @@
         },
         {
           "client_id": "1026188132100-8uo7qeuu02ubt8r71toe7sc57na0funf.apps.googleusercontent.com",
+=======
+          "client_id": "464203043778-tad2q2pmmd0iu3674cfh0odk036e7r69.apps.googleusercontent.com",
+>>>>>>> Stashed changes
           "client_type": 3
         }
       ],
       "api_key": [
         {
+<<<<<<< Updated upstream
           "current_key": "AIzaSyAraBTNfsrZZfb1ioamWTh3yIDHJqOKAzI"
+=======
+          "current_key": "AIzaSyCV72toReRIw7HVSy1QPMmQb0SOjcGQ0vY"
+>>>>>>> Stashed changes
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
+<<<<<<< Updated upstream
               "client_id": "1026188132100-8uo7qeuu02ubt8r71toe7sc57na0funf.apps.googleusercontent.com",
+=======
+              "client_id": "464203043778-tad2q2pmmd0iu3674cfh0odk036e7r69.apps.googleusercontent.com",
+>>>>>>> Stashed changes
               "client_type": 3
             }
           ]
