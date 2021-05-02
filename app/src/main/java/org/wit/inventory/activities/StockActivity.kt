@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_building.toolbarAdd
 import kotlinx.android.synthetic.main.activity_stock.*
 import org.jetbrains.anko.AnkoLogger
@@ -17,6 +18,8 @@ import org.wit.inventory.helpers.showImagePicker
 import org.wit.inventory.main.MainApp
 import org.wit.inventory.models.BuildingModel
 import org.wit.inventory.models.StockModel
+import org.wit.inventory.models.generateRandomBuildId
+import org.wit.inventory.models.generateRandomStockId
 
 class StockActivity : AppCompatActivity(), AnkoLogger {
 
@@ -25,7 +28,8 @@ class StockActivity : AppCompatActivity(), AnkoLogger {
     lateinit var app: MainApp
     var edit = false
     val IMAGE_REQUEST = 1
-
+    private val db = FirebaseDatabase.getInstance().reference.child("Stock")
+    private lateinit var stocks: MutableList<StockModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,12 +78,13 @@ class StockActivity : AppCompatActivity(), AnkoLogger {
                             } else {
                                 stock.inStock = stockQuantity.text.toString().toLong()
                                 if (edit) {
-                                    app.stock.update(stock.copy())
+                                    app.stocks.update(stock.copy())
                                     info("update Button Pressed: $stockName")
                                     setResult(AppCompatActivity.RESULT_OK)
                                     finish()
                                 } else {
-                                    app.stock.create(stock.copy())
+                                    stock.id = generateRandomStockId()
+                                    app.stocks.create(stock.copy())
                                     info("add Button Pressed: $stockName")
                                     setResult(AppCompatActivity.RESULT_OK)
                                     finish()
@@ -106,7 +111,7 @@ class StockActivity : AppCompatActivity(), AnkoLogger {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item?.itemId) {
             R.id.item_delete -> {
-                app.stock.delete(stock)
+                app.stocks.delete(stock)
                 finish()
             }
             R.id.item_cancel -> {
