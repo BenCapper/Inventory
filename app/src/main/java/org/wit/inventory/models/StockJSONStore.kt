@@ -35,10 +35,6 @@ class StockJSONStore : StockStore, AnkoLogger {
         return stocks
     }
 
-    override fun findByBranchId(id: Long): List<StockModel> {
-        var stockList = findAll() as List<StockModel>
-        return stockList.filter { s -> s.branch == id  };
-    }
 
     override fun create(stock: StockModel) {
         stock.id = generateRandomStockId()
@@ -64,6 +60,10 @@ class StockJSONStore : StockStore, AnkoLogger {
 
     override fun filterStock(stockName: String): List<StockModel> {
         return stocks.filter { s -> s.name.toLowerCase().contains(stockName.toLowerCase()) }
+    }
+
+    override fun search(id: Long): List<StockModel> {
+        TODO("Not yet implemented")
     }
 
     override fun delete(stock: StockModel) {
