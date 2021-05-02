@@ -7,14 +7,18 @@ import org.wit.inventory.models.*
 
 
 class MainApp : Application(), AnkoLogger {
-    lateinit var buildings: BuildingStore
-    lateinit var stock: StockStore
+    //lateinit var buildingsJson: BuildingStore
+    //lateinit var stockJson: StockStore
+    lateinit var builds: BuildingStore
+    lateinit var stocks: StockStore
 
 
     override fun onCreate() {
         super.onCreate()
-        buildings = BuildingJSONStore(applicationContext)
-        stock = StockJSONStore(applicationContext)
+        //buildingsJson = BuildingJSONStore(applicationContext)
+        //stockJson = StockJSONStore(applicationContext)
+        builds = FirebaseBuildings()
+        stocks = FirebaseStock()
         info("Inventory started")
     }
 }
