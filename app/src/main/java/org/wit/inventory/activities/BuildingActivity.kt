@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_building.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
@@ -17,6 +18,7 @@ import org.wit.inventory.helpers.showImagePicker
 import org.wit.inventory.main.MainApp
 import org.wit.inventory.models.BuildingModel
 import org.wit.inventory.models.Location
+import org.wit.inventory.models.generateRandomBuildId
 
 class BuildingActivity : AppCompatActivity(), AnkoLogger {
 
@@ -25,7 +27,8 @@ class BuildingActivity : AppCompatActivity(), AnkoLogger {
     var edit = false
     val IMAGE_REQUEST = 1
     val LOCATION_REQUEST = 2
-
+    private val db = FirebaseDatabase.getInstance().reference.child("Building")
+    private lateinit var builds: MutableList<BuildingModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,14 +54,15 @@ class BuildingActivity : AppCompatActivity(), AnkoLogger {
                 toast(R.string.enter_building_name)
             } else {
                 if (edit) {
-                    app.buildings.update(building.copy())
+                    app.builds.update(building)
                     info("update Button Pressed: $buildingName")
-                    setResult(AppCompatActivity.RESULT_OK)
+                    setResult(RESULT_OK)
                     finish()
                 } else {
-                    app.buildings.create(building.copy())
+                    building.id = generateRandomBuildId()
+                    app.builds.create(building)
                     info("add Button Pressed: $buildingName")
-                    setResult(AppCompatActivity.RESULT_OK)
+                    setResult(RESULT_OK)
                     finish()
                 }
             }
@@ -88,7 +92,7 @@ class BuildingActivity : AppCompatActivity(), AnkoLogger {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item?.itemId) {
             R.id.item_delete -> {
-                app.buildings.delete(building)
+                app.builds.delete(building)
                 finish()
             }
             R.id.item_cancel -> {
