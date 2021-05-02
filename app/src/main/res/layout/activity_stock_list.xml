@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:id="@+id/stockSearch"
+            android:queryHint="@string/search_stock"
             android:layout_marginTop="-6dp"/>
     </com.google.android.material.appbar.AppBarLayout>
 
